@@ -24,11 +24,11 @@ class Agent:
             model = Sequential()
 
             model.add(Input(self.obs_shape[0]))
-            model.add(Dense(128, activation="relu"))
-            model.add(Dropout(0.15))
-            model.add(Dense(128, activation="relu"))
+            model.add(Dense(32, activation="relu"))
             model.add(Dropout(0.15))
             model.add(Dense(32, activation="relu"))
+            model.add(Dropout(0.15))
+            model.add(Dense(16, activation="relu"))
             model.add(Dropout(0.1))
             model.add(Dense(self.n_actions))
 
@@ -102,7 +102,6 @@ while e < EPISODES:
 
         n_s, r, d, _ = env.step(a)
 
-        #if d and score < 500: reward = -10
         agent.learn()
         agent.add_experience(s, a, r, d, n_s)
 
@@ -116,12 +115,12 @@ while e < EPISODES:
     if e % 25 == 0:
         print(f"E: {e}, eps {eps:.2f} -> reward in last 25 episodes {avg:.2f}")
 
-    # If last 25 episodes scored more than 450 on average, env is solved
+    # If last 25 episodes scored more than 475 on average, env is solved
     if avg > 475:
         print(f"Resolved in episode {e}")
         break
 
-    # Get new epsilon - either decaued number or epsilon_min
+    # Get new epsilon - either decayed number or epsilon_min
     eps = max([eps - eps_decay, eps_min])
 
 print("Done")
